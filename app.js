@@ -3,7 +3,7 @@ const mongoose=require('mongoose');
 const bodyparser=require('body-parser');
 const cors=require('cors');
 
-const userrouter=require('../Community_service/routes/userroutes');
+const userrouter=require('../routes/userroutes');
 
 mongoose.connect('mongodb+srv://jayavardhinim14:Jayvardh2004@cluster0.yxnqgbb.mongodb.net/Community_service?retryWrites=true&w=majority&appName=Cluster0')
 .then(()=>{
