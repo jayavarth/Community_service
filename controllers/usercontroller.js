@@ -33,7 +33,7 @@ const Login=async(req,res)=>{
         const token=jwt.sign({userId : user._id},"secret_key",{
             expiresIn:'2h'
         });
-        res.status(200).json({message:token})
+        res.status(200).json({"token":token});
     }
     catch(err){
         console.log(err);
