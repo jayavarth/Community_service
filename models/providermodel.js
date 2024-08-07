@@ -6,8 +6,7 @@ const Providerschema= new mongoose.Schema({
         required: true,
     },
     providername:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         required: true
     },
     profession: {
