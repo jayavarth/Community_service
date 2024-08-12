@@ -21,12 +21,12 @@ const addclient=async(req,res)=>{
         const cnameid=await User.findOne({_id:userid});
         const clientname=cnameid.username;
     
-        const clientId=uuidv4();
     
-        const newclient=new Client({clientId,clientname,clientphno,address});
+        const newclient=new Client({clientId:userid,
+            clientname,clientphno,address});
         await newclient.save();
     
-        res.status(200).json({message:"user added successfully"});
+        res.status(200).json({message:"client details added successfully"});
     }
     catch(err){
         console.log(err);
