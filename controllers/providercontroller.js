@@ -121,18 +121,18 @@ const providerinfo= async (req, res) => {
     try {
         const { location, service } = req.query;
 
-        console.log('Search Query Params:', { location, service }); // Log the search parameters
+        console.log('Search Query Params:', { location, service });
 
         const query = {
             location: { $regex: new RegExp(location, 'i') },
             servicesOffered: { $in: [service] }
         };
 
-        console.log('MongoDB Query:', query); // Log the query object
+        console.log('MongoDB Query:', query); 
 
         const providers = await Provider.find(query);
 
-        console.log('Search Results:', providers); // Log the search results
+        console.log('Search Results:', providers);
 
         res.json(providers);
     } catch (error) {
