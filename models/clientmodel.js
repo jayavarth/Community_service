@@ -14,23 +14,28 @@ const clientschema=new mongoose.Schema({
         required:true
     },
     address: {
-        address: {
-          type: String,
-          required: true
-        },
-        city: {
-          type: String,
-          required: true
-        },
-        state: {
-          type: String,
-          required: true
-        },
-        postalCode: {
-          type: String,
-          required: true
-        }
-    }
+      type: String,
+      required: true
+    },
+    city: {
+      type: String,
+      required: true
+    },
+    streetname: {
+      type: String,
+      required: true
+    },
+    postalCode: {
+      type: String,
+      required: true
+    },
+    bookinghistory:[{
+      providerId:String,
+      orderedDate:{
+        type:Date,
+        default:Date.now
+      },
+    }]
 })
 
 const Client=mongoose.model('Clients',clientschema);

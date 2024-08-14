@@ -2,22 +2,33 @@ const User=require('../models/Usermodel');
 const bcrypt=require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const adduser=async(req,res)=>{
-    try{
-        const {username,email,password,role}=req.body;
-        const exist=await User.findOne({email:email});
-        if(exist){
-            return res.send("user already exist");
+const adduser = async (req, res) => {
+    try {
+        const { username, email, password, role } = req.body;
+        const exist = await User.findOne({ email });
+        if (exist) {
+            return res.status(400).json({ message: "User already exists" });
         }
-        const newuser=new User({username,email,password,role});
+
+        // Create the new user (password will be hashed by the pre-save hook)
+        const newuser = new User({ username, email, password, role });
         await newuser.save();
-        res.status(200).json({message:"user added successfully"});
-    }
-    catch(err){
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: newuser._id, role: newuser.role },
+            "secret_key",
+            { expiresIn: '2h' }
+        );
+
+        // Send response with token
+        res.status(200).json({ message: "User added successfully", token });
+    } catch (err) {
         console.log(err);
-        res.status(500).json({message:"Internal server error"});
+        res.status(500).json({ message: "Internal server error" });
     }
-}
+};
+
 
 // const Login=async(req,res)=>{
 //     const {email,password}=req.body;
@@ -44,26 +55,29 @@ const adduser=async(req,res)=>{
 
 const Login = async (req, res) => {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    
+
     try {
+        // Find user by email
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: "Invalid user email" });
         }
 
+        // Compare the provided password with the stored hashed password
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) {
             return res.status(400).json({ message: "Invalid password" });
         }
 
-        // Include the user's role in the token payload
+        // Generate JWT token
         const token = jwt.sign(
-            { userId: user._id, role: user.role }, // Add role here
+            { userId: user._id, role: user.role },
             "secret_key",
             { expiresIn: '2h' }
         );
 
-        res.status(200).json({ "token": token });
+        // Respond with the token
+        res.status(200).json({ token });
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: "Internal server error" });

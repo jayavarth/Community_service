@@ -54,7 +54,11 @@ const ProviderSchema = new mongoose.Schema({
   averageRating: {
     type: Number,
     default: 0,
-  }
+  },
+  clients:[{
+    clientId:String,
+    date: { type: Date, default: Date.now }
+  }]
 });
 
 const Provider = mongoose.model('Provider', ProviderSchema);
